@@ -56,3 +56,73 @@ A secure web platform designed to store, sign, and manage documents with robust 
 - **Wireshark (Security Audit)**
 
 ---
+## 🚀 How to Run the Project
+
+Follow these steps to set up and run the project locally:
+
+### 1. 📦 Clone the Repository
+```bash
+git clone https://github.com/mennashraf05/A-Secure-Document-Vault-with-Authentication-Integrity-and-Encryption-.git
+cd A-Secure-Document-Vault-with-Authentication-Integrity-and-Encryption-
+---
+2. 🐍 Create & Activate a Virtual Environment (optional but recommended)
+python -m venv venv
+source venv/bin/activate   # on Linux/macOS
+venv\Scripts\activate      # on Windows
+---
+3. 📚 Install Dependencies
+
+pip install -r requirements.txt
+4. ⚙️ Set Up Environment Variables
+Create a .env file in the root directory with the following variables:
+
+env
+FLASK_APP=app.py
+FLASK_ENV=development
+SECRET_KEY=your-secret-key
+DATABASE_URI=mysql://username:password@localhost/securevault
+OAUTHLIB_INSECURE_TRANSPORT=1  # Only for development
+✅ Replace username, password, and your-secret-key accordingly.
+
+5. 🗄️ Set Up the Database
+Log into MySQL and run:
+
+CREATE DATABASE securevault;
+Then, inside the project folder, run:
+
+flask db init
+flask db migrate
+flask db upgrade
+6. 🔑 Configure OAuth (Google / GitHub / Okta)
+You’ll need to register your app with:
+
+Google Developers Console
+
+GitHub Developer Settings
+
+Okta
+
+Then update .env with the credentials:
+
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
+GITHUB_CLIENT_ID=...
+GITHUB_CLIENT_SECRET=...
+OKTA_CLIENT_ID=...
+OKTA_CLIENT_SECRET=...
+7. ✅ Run the App
+
+flask run
+Visit: http://127.0.0.1:5000
+
+8. 🔐 2FA Setup
+On first login, you will be prompted to configure 2FA using a QR code.
+Use Google Authenticator or any TOTP app to scan it.
+
+9. 🛡️ HTTPS (Optional for Production)
+You can configure HTTPS locally using OpenSSL:
+
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365
+Then run Flask with:
+
+flask run --cert=cert.pem --key=key.pem
