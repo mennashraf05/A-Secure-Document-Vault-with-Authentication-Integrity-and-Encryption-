@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureDocs - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/okta.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous">
+    <style>
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .loading-spinner {
+            text-align: center;
+            color: white;
+        }
+        
+        .loading-spinner i {
+            font-size: 3em;
+            margin-bottom: 1rem;
+        }
+        
+        .social-login {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            transition: opacity 0.3s;
+        }
+        
+        .social-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .social-btn i {
+            margin-right: 10px;
+        }
+        
+        .btn-okta {
+            background-color: #00297A;
+        }
+        
+        .btn-github {
+            background-color: #333;
+        }
+        
+        .btn-google {
+            background-color: #DB4437;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-container"></div>
+    <div id="slider-container"></div>
+    
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner okta-spinner"></i>
+            <p>Connecting to Okta...</p>
+        </div>
+    </div>
+    
+    <div class="form-container" id="login">
+        <h1>Login</h1>
+        <div class="auth-link">
+            <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign up</a></p>
+        </div>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" style="display: block !important;">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('login') }}" id="loginForm">
+            <div class="form-group">
+                <i class="fa-solid fa-envelope" id="ic"></i>
+                <input type="email" id="email" name="email" required>
+                <label for="email">Email</label>
+            </div>
+
+            <div class="form-group">
+                <i class="fa-solid fa-lock" id="ic"></i>
+                <input type="password" id="password" name="password" required>
+                <i class="fa-sharp fa-solid fa-eye" id="togglePassword" data-target="password"></i>
+                <label for="password">Password</label>
+            </div>
+
+            {% if show_2fa %}
+            <div class="form-group">
+                <i class="fa-solid fa-key" id="ic"></i>
+                <input type="text" id="token" name="token" required>
+                <label for="token">2FA Code</label>
+            </div>
+            {% endif %}
+
+            <div class="options">
+                <p>
+                    <input type="checkbox" class="checkBox" id="remember" name="remember"> Remember me
+                </p>
+                <a href="{{ url_for('forgot_password') }}" class="forgot-password">
+                    <i class="fa-solid fa-key"></i>
+                    Forgot Password?
+                </a>
+            </div>
+
+            <div class="social-login">
+                <a href="{{ url_for('github_login') }}" class="social-btn btn-github">
+                    <i class="fab fa-github"></i> Login with GitHub
+                </a>
+                <a href="{{ url_for('google_login') }}" class="social-btn btn-google">
+                    <i class="fab fa-google"></i> Login with Google
+                </a>
+                <a href="{{ url_for('okta_login') }}" class="social-btn btn-okta" id="oktaLoginBtn">
+                    <i class="fas fa-lock"></i> Login with Okta
+                </a>
+            </div>
+
+            <div class="separator">
+                <span>or</span>
+            </div>
+
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/okta.js') }}"></script>
+    <script>
+        document.getElementById('oktaLoginBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            window.location.href = this.href;
+        });
+    </script>
+</body>
+</html> 

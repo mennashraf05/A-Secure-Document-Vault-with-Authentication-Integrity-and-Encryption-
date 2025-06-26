@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}Documents{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Flash Messages -->
+    <div class="row mb-3">
+        <div class="col">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {% if category == 'success' %}
+                                <i class="fas fa-check-circle me-2"></i>
+                            {% elif category == 'danger' %}
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                            {% elif category == 'warning' %}
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                            {% else %}
+                                <i class="fas fa-info-circle me-2"></i>
+                            {% endif %}
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col">
+            <h2 class="mb-3">
+                <i class="fas fa-file-alt"></i> 
+                {% if current_user.is_admin() %}All Documents{% else %}My Documents{% endif %}
+            </h2>
+            <a href="{{ url_for('upload_document') }}" class="btn btn-primary">
+                <i class="fas fa-upload"></i> Upload New Document
+            </a>
+        </div>
+    </div>
+
+    {% if documents %}
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Size</th>
+                            <th>Upload Date</th>
+                            {% if current_user.is_admin() %}
+                            <th>Owner</th>
+                            {% endif %}
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for doc in documents %}
+                        <tr>
+                            <td>
+                                <i class="fas fa-file me-2"></i>
+                                {{ doc.original_filename }}
+                            </td>
+                            <td>{{ doc.file_type }}</td>
+                            <td>
+                                {% if doc.file_size < 1024 %}
+                                    {{ doc.file_size }} B
+                                {% elif doc.file_size < 1048576 %}
+                                    {{ (doc.file_size / 1024)|round(1) }} KB
+                                {% else %}
+                                    {{ (doc.file_size / 1048576)|round(1) }} MB
+                                {% endif %}
+                            </td>
+                            <td>{{ doc.upload_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                            {% if current_user.is_admin() %}
+                            <td>{{ doc.owner.username }}</td>
+                            {% endif %}
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{{ url_for('download_document', doc_id=doc.id) }}" 
+                                       class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-download"></i> Download
+                                    </a>
+                                    <form method="POST" action="{{ url_for('delete_file', file_id=doc.id) }}"
+                                          class="d-inline" onsubmit="return confirm('Are you sure you want to delete this document?');">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> No documents found.
+                <a href="{{ url_for('upload_document') }}" class="alert-link">Upload your first document</a>.
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Verification Status Modal -->
+    <div class="modal fade" id="verificationModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Document Verification Status</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="verificationMessages">
+                        <!-- Verification messages will be displayed here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Show verification modal when messages are present
+document.addEventListener('DOMContentLoaded', function() {
+    const messages = document.querySelectorAll('.alert');
+    if (messages.length > 0) {
+        const verificationMessages = document.getElementById('verificationMessages');
+        messages.forEach(message => {
+            const clone = message.cloneNode(true);
+            verificationMessages.appendChild(clone);
+        });
+        
+        const modal = new bootstrap.Modal(document.getElementById('verificationModal'));
+        modal.show();
+    }
+});
+</script>
+{% endblock %} 

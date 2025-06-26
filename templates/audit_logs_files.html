@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Audit Logs - Files</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <style>
+        .search-bar { margin-bottom: 20px; }
+        .search-bar input, .search-bar select { padding: 6px; margin-right: 10px; }
+        .export-btn { padding: 6px 12px; background: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+        .export-btn:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    {% include 'header.html' %}
+    <div class="admin-dashboard">
+        <div class="dashboard-header">
+            <h1><i class="fas fa-clipboard-list"></i> Audit Logs - Files</h1>
+        </div>
+        <div class="content-section">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search by user, file, action, details...">
+                <select id="actionFilter">
+                    <option value="">All Actions</option>
+                    <option value="upload">Upload</option>
+                    <option value="delete">Delete</option>
+                    <option value="edit">Edit</option>
+                </select>
+                <button class="export-btn" onclick="exportTableToCSV('audit_logs_files.csv')">Export CSV</button>
+            </div>
+            <table class="audit-logs-table" id="auditLogsTable">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>User</th>
+                        <th>Action</th>
+                        <th>File</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                    <tr>
+                        <td>{{ log.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                        <td>{{ log.user.username if log.user else 'Unknown' }}</td>
+                        <td>{{ log.action }}</td>
+                        <td>{{ log.filename or '' }}</td>
+                        <td>{{ log.details or '' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+    // بحث وتصفية
+    const searchInput = document.getElementById('searchInput');
+    const actionFilter = document.getElementById('actionFilter');
+    const table = document.getElementById('auditLogsTable');
+    searchInput.addEventListener('input', filterTable);
+    actionFilter.addEventListener('change', filterTable);
+    function filterTable() {
+        const search = searchInput.value.toLowerCase();
+        const action = actionFilter.value;
+        for (let row of table.tBodies[0].rows) {
+            const user = row.cells[1].textContent.toLowerCase();
+            const act = row.cells[2].textContent.toLowerCase();
+            const file = row.cells[3].textContent.toLowerCase();
+            const details = row.cells[4].textContent.toLowerCase();
+            const match = (!search || user.includes(search) || file.includes(search) || act.includes(search) || details.includes(search));
+            const actionMatch = !action || act === action;
+            row.style.display = (match && actionMatch) ? '' : 'none';
+        }
+    }
+    // تصدير CSV
+    function exportTableToCSV(filename) {
+        let csv = [];
+        const rows = table.querySelectorAll('tr');
+        for (let row of rows) {
+            let cols = Array.from(row.querySelectorAll('th,td')).map(e => '"' + e.innerText.replace(/"/g, '""') + '"');
+            csv.push(cols.join(','));
+        }
+        const csvFile = new Blob([csv.join('\n')], {type: 'text/csv'});
+        const downloadLink = document.createElement('a');
+        downloadLink.download = filename;
+        downloadLink.href = window.URL.createObjectURL(csvFile);
+        downloadLink.style.display = 'none';
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    }
+    </script>
+</body>
+</html> 

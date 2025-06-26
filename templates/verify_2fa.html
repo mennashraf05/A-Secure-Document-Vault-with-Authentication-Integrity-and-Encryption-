@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}Verify Two-Factor Authentication - Secure Auth System{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-shield-alt me-2"></i>Verify Two-Factor Authentication
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="alert alert-info" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Please enter the 6-digit code from your authenticator app.
+                        </div>
+                    </div>
+
+                    <form method="POST" action="{{ url_for('verify_2fa') }}">
+                        <div class="mb-4">
+                            <div class="form-floating">
+                                <input type="text" 
+                                       class="form-control form-control-lg text-center" 
+                                       id="token" 
+                                       name="token" 
+                                       pattern="[0-9]{6}" 
+                                       maxlength="6" 
+                                       required 
+                                       autocomplete="off"
+                                       placeholder="Enter code">
+                                <label for="token">Authentication Code</label>
+                            </div>
+                            <div class="form-text text-center">
+                                Open Google Authenticator to view your code
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-check me-2"></i>Verify Code
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="mt-4 text-center">
+                        <p class="text-muted">
+                            <i class="fas fa-clock me-1"></i>
+                            Codes refresh every 30 seconds
+                        </p>
+                        {% if lost_device_url %}
+                        <a href="{{ lost_device_url }}" class="text-decoration-none">
+                            <i class="fas fa-question-circle me-1"></i>
+                            Lost access to your authenticator?
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+// Auto-submit when 6 digits are entered
+document.getElementById('token').addEventListener('input', function(e) {
+    if (this.value.length === 6 && this.value.match(/^[0-9]{6}$/)) {
+        this.form.submit();
+    }
+});
+
+// Focus the input field on page load
+window.addEventListener('load', function() {
+    document.getElementById('token').focus();
+});
+</script>
+{% endblock %}
+
+{% endblock %} 

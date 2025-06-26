@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureDocs - Admin Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin_login.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous">
+</head>
+<body>
+    <div id="header-container"></div>
+    <div id="slider-container"></div>
+    
+    <div class="form-container" id="admin-login">
+        <div class="admin-badge">
+            <i class="fas fa-shield-alt"></i>
+            <span>Admin Portal</span>
+        </div>
+        <h1>Admin Login</h1>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('admin_login') }}" id="adminLoginForm">
+            <div class="form-group">
+                <i class="fa-solid fa-envelope" id="ic"></i>
+                <input type="email" id="email" name="email" required>
+                <label for="email">Admin Email</label>
+            </div>
+
+            <div class="form-group">
+                <i class="fa-solid fa-lock" id="ic"></i>
+                <input type="password" id="password" name="password" required>
+                <i class="fa-sharp fa-solid fa-eye" id="toggleIcon" data-target="password"></i>
+                <label for="password">Password</label>
+            </div>
+
+            <button type="submit">Login as Admin</button>
+        </form>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+</body>
+</html> 

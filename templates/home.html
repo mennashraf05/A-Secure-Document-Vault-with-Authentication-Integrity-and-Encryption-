@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Secure Auth System{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Welcome Banner -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h3 class="mb-0">
+                        <i class="fas fa-smile-beam me-2"></i>
+                        {% if user.is_admin() %}
+                            Welcome Admin {{ user.username }}! 
+                            <small class="d-block mt-2">You have full access to manage the system and its users.</small>
+                        {% else %}
+                            Welcome {{ user.username }}!
+                            <small class="d-block mt-2">Welcome to your secure document management dashboard.</small>
+                        {% endif %}
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="fas fa-user-circle me-2"></i>User Information
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <p>
+                        <i class="fas fa-user me-2 text-primary"></i>
+                        <strong>Username:</strong> {{ user.username }}
+                    </p>
+                    <p>
+                        <i class="fas fa-envelope me-2 text-primary"></i>
+                        <strong>Email:</strong> {{ user.email }}
+                    </p>
+                    <p>
+                        <i class="fas fa-shield-alt me-2 text-primary"></i>
+                        <strong>Authentication Method:</strong> 
+                        <span class="badge bg-primary">{{ user.auth_method }}</span>
+                    </p>
+                    <p>
+                        <i class="fas fa-calendar-alt me-2 text-primary"></i>
+                        <strong>Account Created:</strong> {{ user.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
+                    </p>
+                    <p>
+                        <i class="fas fa-user-tag me-2 text-primary"></i>
+                        <strong>Role:</strong>
+                        {% if user.is_admin() %}
+                            <span class="badge bg-danger">admin</span>
+                        {% else %}
+                            <span class="badge bg-secondary">users</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        {% if user.is_admin() %}
+                            <i class="fas fa-user-shield me-2"></i>All Roles & Permissions
+                        {% else %}
+                            <i class="fas fa-user-check me-2"></i>Your Permissions
+                        {% endif %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Permission</th>
+                                    {% if user.is_admin() %}
+                                        <th>Admin</th>
+                                        <th>User</th>
+                                    {% else %}
+                                        <th>Status</th>
+                                    {% endif %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if user.is_admin() %}
+                                    <tr><td>Add/edit/delete users</td><td>✔</td><td></td></tr>
+                                    <tr><td>Manage roles</td><td>✔</td><td></td></tr>
+                                    <tr><td>View system logs</td><td>✔</td><td></td></tr>
+                                    <tr><td>Upload/edit/delete any document</td><td>✔</td><td></td></tr>
+                                    <tr><td>Register/login</td><td>✔</td><td>✔</td></tr>
+                                    <tr><td>Upload and download own documents</td><td>✔</td><td>✔</td></tr>
+                                    <tr><td>Sign documents</td><td>✔</td><td>✔</td></tr>
+                                    <tr><td>View and update own profile</td><td>✔</td><td>✔</td></tr>
+                                {% else %}
+                                    <tr><td>Register/login</td><td>✔</td></tr>
+                                    <tr><td>Upload and download own documents</td><td>✔</td></tr>
+                                    <tr><td>Sign documents</td><td>✔</td></tr>
+                                    <tr><td>View and update own profile</td><td>✔</td></tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">
+                        <i class="fas fa-history me-2"></i>Recent Login Activity
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-sign-in-alt me-1"></i>Login Time</th>
+                                    <th><i class="fas fa-sign-out-alt me-1"></i>Logout Time</th>
+                                    <th><i class="fas fa-key me-1"></i>Method</th>
+                                    <th><i class="fas fa-info-circle me-1"></i>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for log in recent_logs %}
+                                <tr>
+                                    <td>
+                                        <span class="text-primary">
+                                            {{ log.timestamp.strftime('%Y-%m-%d') }}<br>
+                                            {{ log.timestamp.strftime('%I:%M:%S %p') }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {% if log.logout_time %}
+                                            <span class="text-success">
+                                                {{ log.logout_time.strftime('%Y-%m-%d') }}<br>
+                                                {{ log.logout_time.strftime('%I:%M:%S %p') }}
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-info">Active Session</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if log.method == 'github' %}
+                                            <span class="badge bg-dark">
+                                                <i class="fab fa-github me-1"></i>GitHub
+                                            </span>
+                                        {% elif log.method == 'google' %}
+                                            <span class="badge bg-danger">
+                                                <i class="fab fa-google me-1"></i>Google
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-primary">
+                                                <i class="fas fa-user me-1"></i>{{ log.method }}
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if log.success %}
+                                            <span class="badge bg-success">
+                                                <i class="fas fa-check-circle me-1"></i>Success
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-danger">
+                                                <i class="fas fa-times-circle me-1"></i>Failed
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

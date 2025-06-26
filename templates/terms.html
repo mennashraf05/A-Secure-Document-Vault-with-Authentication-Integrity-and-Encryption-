@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - SecureDocs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous">
+    <style>
+        .terms-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            color: #fff;
+        }
+
+        .terms-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .terms-header h1 {
+            font-size: 2.5em;
+            color: #42fbf2;
+            margin-bottom: 15px;
+        }
+
+        .terms-header p {
+            color: #ccc;
+            font-size: 1.1em;
+        }
+
+        .terms-section {
+            margin-bottom: 30px;
+        }
+
+        .terms-section h2 {
+            color: #42fbf2;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .terms-section p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+            color: #eee;
+        }
+
+        .terms-section ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .terms-section li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+            color: #eee;
+        }
+
+        .highlight {
+            color: #42fbf2;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="header-container"></div>
+    
+    <div class="terms-container">
+        <div class="terms-header">
+            <h1><i class="fas fa-file-contract"></i> Terms of Service</h1>
+            <p>Last updated: {{ current_date }}</p>
+        </div>
+
+        <div class="terms-section">
+            <h2><i class="fas fa-user-shield"></i> 1. Account Security</h2>
+            <p>When you create an account with SecureDocs, you must:</p>
+            <ul>
+                <li>Provide accurate and complete information</li>
+                <li>Maintain the security of your account credentials</li>
+                <li>Enable two-factor authentication for enhanced security</li>
+                <li>Notify us immediately of any unauthorized access</li>
+            </ul>
+        </div>
+
+        <div class="terms-section">
+            <h2><i class="fas fa-lock"></i> 2. Document Security</h2>
+            <p>All documents uploaded to SecureDocs are:</p>
+            <ul>
+                <li>Automatically encrypted using industry-standard algorithms</li>
+                <li>Protected with digital signatures for authenticity</li>
+                <li>Stored securely with regular backups</li>
+                <li>Accessible only to authorized users</li>
+            </ul>
+        </div>
+
+        <div class="terms-section">
+            <h2><i class="fas fa-shield-alt"></i> 3. Privacy & Data Protection</h2>
+            <p>We are committed to protecting your privacy and data:</p>
+            <ul>
+                <li>Your personal information is encrypted and securely stored</li>
+                <li>We do not share your data with third parties</li>
+                <li>You have full control over your document sharing permissions</li>
+                <li>Regular security audits are performed to ensure data protection</li>
+            </ul>
+        </div>
+
+        <div class="terms-section">
+            <h2><i class="fas fa-file-signature"></i> 4. User Responsibilities</h2>
+            <p>As a user of SecureDocs, you agree to:</p>
+            <ul>
+                <li>Not share your account credentials with others</li>
+                <li>Not upload malicious or illegal content</li>
+                <li>Respect intellectual property rights</li>
+                <li>Maintain the confidentiality of shared documents</li>
+            </ul>
+        </div>
+
+        <div class="terms-section">
+            <h2><i class="fas fa-history"></i> 5. Document Retention</h2>
+            <p>Our document retention policy includes:</p>
+            <ul>
+                <li>Automatic backup of all documents</li>
+                <li>Version control for document changes</li>
+                <li>Option to permanently delete documents</li>
+                <li>Regular cleanup of unused temporary files</li>
+            </ul>
+        </div>
+
+        <div class="terms-section">
+            <h2><i class="fas fa-exclamation-triangle"></i> 6. Termination</h2>
+            <p>We reserve the right to terminate accounts that:</p>
+            <ul>
+                <li>Violate these terms of service</li>
+                <li>Engage in unauthorized activities</li>
+                <li>Remain inactive for extended periods</li>
+                <li>Pose a security risk to the system</li>
+            </ul>
+        </div>
+
+        <div class="terms-section">
+            <h2><i class="fas fa-headset"></i> 7. Support & Contact</h2>
+            <p>For any questions or concerns:</p>
+            <ul>
+                <li>Contact our support team through the contact form</li>
+                <li>Report security issues immediately</li>
+                <li>Check our documentation for guidance</li>
+                <li>Follow our social media for updates</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+</body>
+</html> 

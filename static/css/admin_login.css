@@ -1,0 +1,155 @@
+#admin-login {
+    top: 25%;
+    height: 450px;
+    background-color: rgba(33, 37, 41, 0.95);
+    border: 1px solid #007bff;
+}
+
+.admin-badge {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #007bff;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.admin-badge i {
+    font-size: 16px;
+}
+
+#admin-login h1 {
+    color: #007bff;
+    margin-top: 30px;
+}
+
+#admin-login .form-group {
+    border-color: #007bff;
+}
+
+#admin-login button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 20px;
+    width: 100%;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#admin-login button:hover {
+    background-color: #0056b3;
+}
+
+#admin-login .options input {
+    border-color: #3498db;
+}
+
+#admin-login .options input:checked {
+    background-color: #3498db;
+    border-color: #2c3e50;
+}
+
+#admin-login .form-group i {
+    color: #3498db;
+}
+
+#admin-login .form-group label {
+    color: #95a5a6;
+}
+
+#admin-login .form-group input {
+    color: #ecf0f1;
+}
+
+#admin-login .error {
+    color: #e74c3c;
+}
+
+.alert {
+    background-color: rgba(44, 62, 80, 0.9);
+    border-color: #3498db;
+    color: #ecf0f1;
+}
+
+#toggleIcon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #3498db;
+    transition: color 0.3s ease;
+    font-size: 16px;
+    z-index: 2;
+}
+
+#toggleIcon:hover {
+    color: #ecf0f1;
+    text-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+.form-group {
+    position: relative;
+}
+
+/* Ensure password input doesn't overlap with the icon */
+#password {
+    padding-right: 35px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 10;
+}
+
+.password-toggle i {
+    color: #3498db;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.password-toggle:hover i {
+    color: #ecf0f1;
+    text-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+#adminPassword {
+    padding-right: 35px !important;
+    color: #ecf0f1 !important;
+    background: transparent !important;
+}
+
+.admin-signup-link {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.admin-signup-link a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.3s ease;
+}
+
+.admin-signup-link a:hover {
+    color: #0056b3;
+    text-decoration: none;
+    transform: translateY(-2px);
+} 
